@@ -1,0 +1,5 @@
+node_modules/
+database/**/*.json
+public/avatars/user-avatars/*.jpg
+public/avatars/default-avatars/*.jpg
+public/avatars/user-avatars/*.png

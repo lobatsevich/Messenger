@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link type="image/x-icon" href="/img/favicon-32x32.png" rel="shortcut icon">
+    <link type="Image/x-icon" href="/img/favicon-32x32.png" rel="icon">
+    <title>Мессенджер</title>
+</head>
+<body>
+
+    <div id="contextMenu" class="hidden">
+        <ul>
+          <li class="edit-button" onclick="editMessage()">Редактировать</li>
+          <li class="copy-button" onclick="copyMessage()">Копировать</li>
+          <li class="delete-button" onclick="deleteMessage()">Удалить</li>
+        </ul>
+    </div>
+
+    <div class="messenger-container">
+
+        <div class="chat-list-container">
+
+            <div class="header">
+                <button type="button" id="showProfile">
+                    <img id="avatar-image-button">
+                </button>
+                <div id="search-users-form">
+                    <input type="text" id="search-users" placeholder="Найти пользователя">
+                </div>
+            </div>
+
+            <div class="profile-container">
+                <div id="profile-info">
+                    <img id="avatar-image">
+
+                    <div id="user-info">
+                        <p id="user-display-name" class="user-display-name"></p>
+                        <p id="user-tag" class="user-tag"></p>
+                    </div>
+                </div>
+        
+                <form id="editProfileForm" enctype="multipart/form-data" class="hidden">
+                    <label for="avatar">
+                        <img id="avatar-image-prewiew" alt="Загрузите аватар">
+                    </label>
+                    <input type="file" id="avatar" name="avatar" accept="image/*">
+                    
+                    <div id="edit-fields">
+                        <p class="user-display-name"><input type="text" id="username" name="username" minlength="4" maxlength="24" placeholder="Новое имя пользователя"></p>
+                        <p class="user-tag"><input type="text" id="tag" name="tag" minlength="4" maxlength="20" placeholder="Новый тег"></p>
+                    </div>
+
+                    <button type="button" onclick="editProfile();toggleEditMode()">Сохранить</button>
+                </form>
+
+                <button id="editButton" onclick="toggleEditMode()">Редактировать</button>
+            </div>
+
+            <ul id="found-users" class="hidden">
+            </ul>
+
+            <ul id="chat-list">
+            </ul>
+
+        </div>
+
+        <div class="chat-container">
+            <div class="chat">
+                <div id="chat-header"></div>
+                <ul id="chat"></ul>
+            </div>
+
+            <form id="send-message-form">
+                <textarea id="content" name="content" placeholder="Введите сообщение..." require></textarea>
+                <div>
+                    <button type="button" onclick="sendMessage()">Отправить</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="companion-info-container">
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script src="js/socket.js"></script>
+    <script src="js/interface.js"></script>
+    <script src="js/messages.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/users.js"></script>
+    <script src="js/frontend.js"></script>
+</body>
+</html>
