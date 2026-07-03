@@ -213,8 +213,8 @@ body {
 .chat-container {
     flex-grow: 1;
     background: url('img/wallp.png') 50% 50%, linear-gradient(
-        rgba(255, 0, 238, 0.3), 
-        rgba(0, 13, 255, 0.3)
+        rgba(255, 0, 238, 0.1), 
+        rgba(0, 13, 255, 0.1)
     ), url('img/wallpapers.jpg') 50% 50%;
     background-size: 25%;
     padding: 15%;
@@ -768,7 +768,6 @@ body {
     padding-bottom: 0;
 }
 
-/* Стили для списка чатов и найденных пользователей */
 #chat-list,
 #found-users {
     list-style-type: none;
@@ -778,7 +777,6 @@ body {
     width: 100%
 }
 
-/* Общие стили для элементов списка чатов и найденных пользователей */
 .chat-list-item,
 .found-users-item {
     display: flex;
@@ -794,7 +792,6 @@ body {
     transition: background 0.2s ease-out;
 }
 
-/* Стили для аватарок */
 .avatar {
     width: 50px;
     height: 50px;
@@ -805,7 +802,6 @@ body {
     flex-shrink: 0;
 }
 
-/* Стили для заголовка чата */
 #chat-header {
     padding: 10px;
     display: flex;
@@ -813,7 +809,6 @@ body {
     cursor: pointer;
 }
 
-/* Стили для изображения аватарки в заголовке чата */
 #chat-header img {
     height: 60px;
     border-radius: 50%;
@@ -821,7 +816,6 @@ body {
     z-index: 1;
 }
 
-/* Стили для имени собеседника в заголовке чата */
 #chat-header h2 {
     color: white;
     display: block;
@@ -830,7 +824,6 @@ body {
     top: 0;
 }
 
-/* Стили для статуса собеседника в заголовке чата */
 #chat-header #companion-status-header {
     color: white;
     position: absolute;
@@ -838,7 +831,6 @@ body {
     left: 95px;
 }
 
-/* Медиа-запрос для адаптации под телефоны */
 @media only screen and (max-width: 600px) {
     .messenger-container {
         flex-direction: column;
@@ -847,7 +839,7 @@ body {
     .chat-list-container {
         width: 100%;
         height: auto;
-        padding-bottom: 10px; /* Добавляем отступ снизу для кнопки создания нового чата */
+        padding-bottom: 10px;
     }
 
     .chat-container {
