@@ -3,6 +3,7 @@ from fastapi.responses import FileResponse
 
 router = APIRouter()
 
+
 @router.get("/")
 async def index():
     return FileResponse("app/static/index.html")
