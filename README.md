@@ -1,130 +1,188 @@
+# 💬 Messenger Project (Node.js → Python Rewrite)
 
-### Backend Structure
-- `app.js` — application entry point
-- `config.js` — server, session, and Socket.IO setup
-- `routes/` — HTTP + WebSocket handlers
-- `database/` — file-based storage layer
-
-### Frontend Structure
-- `socket.js` — real-time communication layer
-- `interface.js` — rendering logic
-- `frontend.js` — UI state management
-- `messages.js` — messaging system
-- `users.js` — user management
-- `utils.js` — helper functions
+This repository contains a real-time messenger system that I originally built in **Node.js + Socket.IO**, and am now actively **rewriting in Python using FastAPI + SQLAlchemy + WebSockets** to improve architecture, scalability, and database design.
 
 ---
 
-## 🔄 Real-time System
+## 🚀 Project Overview
 
-The application uses **Socket.IO** for real-time communication.
+This is a full-stack real-time chat application with:
 
-### Client → Server Events
-- `send_message`
-- `set_room`
-- `message_history`
-- `search_users`
-- `edit_message`
-- `delete_message`
-- `typing`
+- User authentication
+- Real-time messaging (Socket.IO → WebSockets)
+- Profile system with avatars and tags
+- Chat history
+- User search
+- Online/offline status tracking
+- Typing indicators
 
-### Server → Client Events
-- `display_message`
-- `chat_list`
-- `message_history`
-- `user-profile`
-- `companion_info`
-- `update_user_status`
-- `typing`
+The project is designed as a **learning-to-production transition project**, where I progressively move from a JSON-based Node.js backend to a structured Python backend with a proper database layer.
 
 ---
 
-## 🧩 Key Capabilities
+## 🧠 Architecture Evolution
 
-- Private chat system (sender ↔ receiver model)
-- Real-time message synchronization
-- Message lifecycle management (create / edit / delete)
-- Live user search
-- Profile system with avatar upload
+### 🟦 Legacy Version (Node.js)
+
+Located in:
+```
+node_version/
+```
+
+Tech stack:
+- Node.js
+- Express.js
+- Socket.IO
+- JSON file storage
+
+Features:
+- Basic real-time chat
+- File-based storage (users/messages)
 - Session-based authentication
-- Dynamic UI rendering without frameworks
+- Frontend served via Express
 
 ---
 
-## 📦 Data Storage
+### 🟩 Current Version (Python Rewrite)
 
-Currently uses **JSON file-based storage** for simplicity:
-- Users stored in `/database/users`
-- Messages stored in `/database/messages`
+Located in:
+```
+app/
+```
 
-⚠️ This is a temporary solution and will be replaced with a relational database.
-
----
-
-## 🛠 Current Limitations (Known Issues)
-
-- No relational database (currently JSON-based)
-- No service layer separation (logic partly in routes)
-- Frontend uses manual DOM manipulation
-- No centralized state management
-
----
-
-## 🚧 Future Improvements
-
-This project is actively evolving. Planned upgrades include:
-
-### Backend Migration
-- 🔄 Migration from JSON storage → PostgreSQL
-- 🧱 Refactor into service-based architecture
-- ⚡ Improve scalability and performance
-
-### Python Version (Planned)
-A full backend rewrite is planned using:
+Tech stack:
 - FastAPI
 - WebSockets
-- PostgreSQL
-- Async architecture
+- SQLAlchemy (planned / in progress)
+- PostgreSQL (planned)
+- Jinja2 / Static frontend
 
-This will allow:
-- Better scalability
-- Cleaner architecture
-- Improved performance under load
-
-### Frontend Improvements
-- Refactor to component-based architecture
-- Possible migration to modern framework (React/Vue)
-- Better state management
+Planned improvements:
+- Proper relational database schema
+- Repository-Service architecture
+- Scalable WebSocket manager
+- Better separation of concerns
+- Secure authentication (JWT or session-based)
 
 ---
 
-## 🎯 Why this project matters
+## 🏗️ Current Python Structure
 
-This project demonstrates:
-
-- Real-time system design
-- Backend architecture skills
-- WebSocket communication
-- Session-based authentication
-- Full-stack development experience
-- Ability to build production-like applications
-
----
-
-## 📌 Status
-
-🟡 Active development  
-🧪 Experimental architecture  
-🚀 Preparing for internship applications (backend focus)
+```
+app/
+├── api/              # REST endpoints
+├── websocket/        # real-time communication layer
+├── services/         # business logic layer
+├── repositories/     # database access layer
+├── database/         # models, connection, migrations
+├── schemas/          # Pydantic models
+├── static/           # frontend (HTML/CSS/JS)
+├── utils/            # helpers
+└── main.py           # application entry point
+```
 
 ---
 
-## 👨‍💻 Author
+## ⚙️ Setup Instructions
 
-Built as a learning and portfolio project focused on backend development, real-time systems, and scalable architecture design.
+### 1. Clone repository
+```bash
+git clone https://github.com/your-username/messenger.git
+cd messenger
+````
 
 ---
 
-## ⭐ Note
+### 2. Create virtual environment
 
-This project is not a tutorial clone — it is a custom-built real-time system developed from scratch with continuous improvements and planned migration to a more scalable backend architecture.
+```bash
+python -m venv .venv
+```
+
+Activate:
+
+**Windows**
+
+```bash
+.venv\Scripts\activate
+```
+
+---
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 4. Run server
+
+```bash
+uvicorn app.main:app --reload
+```
+
+---
+
+## 📌 Environment Variables
+
+Create `.env` in project root:
+
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/messenger
+SECRET_KEY=your_secret_key
+DEBUG=True
+```
+
+---
+
+## 🔥 Key Features
+
+### 💬 Real-time chat
+
+* Instant messaging via WebSockets
+* Message editing / deletion
+* Typing indicators
+
+### 👤 User system
+
+* Registration / login
+* Profile editing
+* Avatars upload
+* User search
+
+### 🟢 Presence system
+
+* Online / offline status
+* Last seen tracking
+
+---
+
+## 🧭 Project Goal
+
+The goal of this project is not just to build a messenger, but to demonstrate:
+
+* Ability to design backend architecture
+* Migration from simple JS backend → structured Python backend
+* Understanding of database-driven systems
+* Real-time communication systems (WebSockets)
+* Clean separation of concerns (API / Service / Repository layers)
+
+---
+
+## 🔄 Migration Status
+
+* [x] Node.js version completed
+* [x] Basic Python structure created
+* [ ] Database integration
+* [ ] Authentication system rewrite
+* [ ] WebSocket migration
+* [ ] Production-ready deployment setup
+
+---
+
+## 📌 Notes
+
+This project is actively evolving.
+The Python version is currently under development and will eventually replace the Node.js implementation as the main backend.
