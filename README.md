@@ -1,188 +1,198 @@
-# 💬 Messenger Project (Node.js → Python Rewrite)
+# 💬 Messenger Project (FastAPI Backend)
 
-This repository contains a real-time messenger system that I originally built in **Node.js + Socket.IO**, and am now actively **rewriting in Python using FastAPI + SQLAlchemy + WebSockets** to improve architecture, scalability, and database design.
+This repository contains a backend implementation of a real-time messenger system built with **FastAPI, PostgreSQL, and SQLAlchemy**.
+
+The project is a transition from a previous Node.js + Socket.IO prototype into a **clean, scalable backend architecture with proper database design, authentication, and messaging system core**.
 
 ---
 
 ## 🚀 Project Overview
 
-This is a full-stack real-time chat application with:
+This is a backend-first messenger system with:
 
-- User authentication
-- Real-time messaging (Socket.IO → WebSockets)
-- Profile system with avatars and tags
-- Chat history
-- User search
-- Online/offline status tracking
-- Typing indicators
+- User authentication (JWT-based)
+- Private messaging system
+- Group chat support (architecture ready)
+- Chat auto-creation for private dialogs
+- Message history retrieval
+- Read/unread message state
+- Last message tracking for chats
+- Clean layered architecture (API → Service → Repository → DB)
 
-The project is designed as a **learning-to-production transition project**, where I progressively move from a JSON-based Node.js backend to a structured Python backend with a proper database layer.
-
----
-
-## 🧠 Architecture Evolution
-
-### 🟦 Legacy Version (Node.js)
-
-Located in:
-```
-node_version/
-```
-
-Tech stack:
-- Node.js
-- Express.js
-- Socket.IO
-- JSON file storage
-
-Features:
-- Basic real-time chat
-- File-based storage (users/messages)
-- Session-based authentication
-- Frontend served via Express
+The system is designed as a foundation for a full real-time messenger (WebSocket layer planned next).
 
 ---
 
-### 🟩 Current Version (Python Rewrite)
+## 🧠 Architecture
 
-Located in:
 ```
+
+API Layer (FastAPI routes)
+↓
+Service Layer (business logic)
+↓
+Repository Layer (database access)
+↓
+SQLAlchemy Models
+↓
+PostgreSQL
+
+```
+
+This ensures:
+- separation of concerns
+- testability
+- scalability
+- clean domain logic
+
+---
+
+## 🏗️ Project Structure
+
+```
+
 app/
-```
-
-Tech stack:
-- FastAPI
-- WebSockets
-- SQLAlchemy (planned / in progress)
-- PostgreSQL (planned)
-- Jinja2 / Static frontend
-
-Planned improvements:
-- Proper relational database schema
-- Repository-Service architecture
-- Scalable WebSocket manager
-- Better separation of concerns
-- Secure authentication (JWT or session-based)
-
----
-
-## 🏗️ Current Python Structure
-
-```
-app/
-├── api/              # REST endpoints
-├── websocket/        # real-time communication layer
+├── api/              # REST API routes
+│   ├── auth.py
+│   ├── chat.py
+│   ├── deps.py
+│   ├── messages.py
+│   └── pages.py
+│
 ├── services/         # business logic layer
+│   ├── chat_service.py
+│   ├── message_service.py
+│   └── user_service.py
+│
 ├── repositories/     # database access layer
-├── database/         # models, connection, migrations
-├── schemas/          # Pydantic models
-├── static/           # frontend (HTML/CSS/JS)
-├── utils/            # helpers
-└── main.py           # application entry point
+│   ├── chats.py
+│   ├── users.py
+│   └── messages.py
+│
+├── database/
+│   ├── models/       # SQLAlchemy models
+│   ├── database.py   # engine/session/Base
+│   └── dependencies.py
+│
+├── schemas/          # Pydantic DTOs
+├── utils/            # JWT, helpers
+└── main.py
+
 ```
 
 ---
 
-## ⚙️ Setup Instructions
+## ⚙️ Tech Stack
 
-### 1. Clone repository
-```bash
-git clone https://github.com/your-username/messenger.git
-cd messenger
-````
-
----
-
-### 2. Create virtual environment
-
-```bash
-python -m venv .venv
-```
-
-Activate:
-
-**Windows**
-
-```bash
-.venv\Scripts\activate
-```
+- **FastAPI**
+- **PostgreSQL**
+- **SQLAlchemy 2.0**
+- **Alembic (migrations)**
+- **Pydantic**
+- **JWT (python-jose)**
+- **bcrypt**
 
 ---
 
-### 3. Install dependencies
+## 🔐 Authentication
 
-```bash
-pip install -r requirements.txt
-```
-
----
-
-### 4. Run server
-
-```bash
-uvicorn app.main:app --reload
-```
+- User registration with login, username, tag, password
+- JWT-based authentication
+- Protected routes via dependency injection
+- `/auth/login`, `/auth/register`, `/auth/me`
 
 ---
 
-## 📌 Environment Variables
+## 💬 Messaging System
 
-Create `.env` in project root:
+### Features:
 
-```env
-DATABASE_URL=postgresql://user:password@localhost:5432/messenger
-SECRET_KEY=your_secret_key
-DEBUG=True
-```
-
----
-
-## 🔥 Key Features
-
-### 💬 Real-time chat
-
-* Instant messaging via WebSockets
-* Message editing / deletion
-* Typing indicators
-
-### 👤 User system
-
-* Registration / login
-* Profile editing
-* Avatars upload
-* User search
-
-### 🟢 Presence system
-
-* Online / offline status
-* Last seen tracking
+- Send messages in chats
+- Private messaging (auto chat creation if not exists)
+- Group chat messaging support
+- Message history per chat
+- Read/unread tracking (`is_read`)
+- Message timestamps
+- Edited message flag (prepared)
 
 ---
 
-## 🧭 Project Goal
+## 🧩 Chat System
 
-The goal of this project is not just to build a messenger, but to demonstrate:
-
-* Ability to design backend architecture
-* Migration from simple JS backend → structured Python backend
-* Understanding of database-driven systems
-* Real-time communication systems (WebSockets)
-* Clean separation of concerns (API / Service / Repository layers)
+- Private chats are created automatically between users
+- Group chats supported via `is_group` flag
+- Chat membership via `chat_members`
+- Chat ownership and access validation
+- Ready for real-time sync (WebSocket layer planned)
 
 ---
 
-## 🔄 Migration Status
+## 📊 Database Features
 
-* [x] Node.js version completed
-* [x] Basic Python structure created
-* [ ] Database integration
-* [ ] Authentication system rewrite
-* [ ] WebSocket migration
-* [ ] Production-ready deployment setup
+- Relational schema (users, chats, messages, chat_members)
+- Foreign keys with CASCADE behavior
+- Alembic migrations configured
+- Chat enrichment fields:
+  - `last_message_id`
+  - `last_message_at`
+
+These fields allow efficient chat sorting without heavy joins.
+
+---
+
+## 📡 API Endpoints
+
+### Auth
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /auth/me`
+
+### Messages
+- `POST /messages/private`
+- `POST /messages/chat`
+- `GET /messages/history/{chat_id}`
+- `POST /messages/{chat_id}/read`
+
+---
+
+## 🧭 Current Status
+
+### ✅ Implemented
+
+- JWT authentication system
+- User system
+- Chat creation and membership logic
+- Private messaging system
+- Message history
+- Read/unread state
+- Database migrations (Alembic)
+- Chat last-message tracking fields
+- Clean architecture (service/repository separation)
+
+### 🚧 Next Steps
+
+- WebSocket real-time messaging
+- Live chat updates
+- Typing indicators
+- Online/offline presence system
+- Chat list endpoint with optimized sorting
+- Frontend integration
+
+---
+
+## 🎯 Project Goal
+
+This project is designed to demonstrate:
+
+- Backend architecture design skills
+- Real-world messaging system implementation
+- Database-driven system design
+- Transition from prototype (Node.js) → production-style Python backend
+- Readiness for scalable real-time systems
 
 ---
 
 ## 📌 Notes
 
-This project is actively evolving.
-The Python version is currently under development and will eventually replace the Node.js implementation as the main backend.
+This is an actively evolving project.
+Current focus: building a production-ready backend foundation for a real-time messenger system.
