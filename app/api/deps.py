@@ -4,7 +4,7 @@ from jose import jwt, JWTError
 
 from app.database.dependencies import get_db
 from app.utils.jwt import SECRET_KEY, ALGORITHM
-from app.database.models.user import User
+from app.database.models import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 

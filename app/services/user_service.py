@@ -1,4 +1,4 @@
-from app.repositories.users import UserRepository
+from app.repositories import UserRepository
 from app.database.models import User
 
 from app.utils.security import hash_password, verify_password
