@@ -1,2 +1,2 @@
 from .auth import RegisterRequest
-from .message import SendPrivateMessageRequest, SendChatMessageRequest
+from .chat import ChatPreview, PrivateChatRequest, ChatResponse, SendMessageRequest, MessageResponse

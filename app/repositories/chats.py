@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 
-from app.database.models import Chat, ChatMember, Message
+from app.database.models import Chat, ChatMember
 
 
 class ChatRepository:
@@ -38,9 +38,6 @@ class ChatRepository:
             ChatMember(chat_id=chat.id, user_id=user2_id)
         ])
 
-        self.db.commit()
-        self.db.refresh(chat)
-
         return chat
     
 
@@ -66,9 +63,9 @@ class ChatRepository:
     
 
     def update_last_message(self, chat_id: int, message_id: int, timestamp):
-        self.db.query(Chat).filter(Chat.id == chat_id).update({
+        self.db.query(Chat).filter(
+            Chat.id == chat_id
+        ).update({
             Chat.last_message_id: message_id,
             Chat.last_message_at: timestamp
         })
-        
-        self.db.commit()

@@ -16,8 +16,7 @@ class MessageRepository:
         )
 
         self.db.add(msg)
-        self.db.commit()
-        self.db.refresh(msg)
+        self.db.flush()
         
         return msg
     
@@ -50,3 +49,12 @@ class MessageRepository:
             .order_by(Message.created_at.desc())
             .first()
         )
+    
+
+    def get_by_id(self, message_id: int):
+        return (
+            self.db.query(Message)
+            .filter(Message.id == message_id)
+            .first()
+        )
+    

@@ -7,6 +7,13 @@ class UserRepository:
     def __init__(self, db: Session):
         self.db = db
 
+
+    def get_by_id(self, user_id: int):
+        return (
+            self.db.query(User)
+            .filter(User.id == user_id)
+            .first()
+        )
     
     def get_by_login(self, login: str):
         return self.db.query(User).filter(User.login == login).first()
@@ -21,3 +28,4 @@ class UserRepository:
         self.db.commit()
         self.db.refresh(user)
         return user
+    
