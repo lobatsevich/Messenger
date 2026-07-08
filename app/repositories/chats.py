@@ -69,3 +69,11 @@ class ChatRepository:
             Chat.last_message_id: message_id,
             Chat.last_message_at: timestamp
         })
+
+
+    def get_chat_members(self, chat_id: int):
+        return (
+            self.db.query(ChatMember.user_id)
+            .filter(ChatMember.chat_id == chat_id)
+            .all()
+        )
