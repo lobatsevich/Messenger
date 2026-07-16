@@ -14,7 +14,7 @@ class ConnectionManager:
         self.connections[user_id].add(websocket)
 
 
-    async def disconnect(self, user_id: int, websocket: WebSocket):
+    def disconnect(self, user_id: int, websocket: WebSocket):
         if user_id in self.connections:
             self.connections[user_id].discard(websocket)
     
@@ -29,7 +29,7 @@ class ConnectionManager:
             try:
                 await websocket.send_json(data)
             except Exception:
-                await self.disconnect(user_id, websocket)
+                self.disconnect(user_id, websocket)
 
 
 manager = ConnectionManager()

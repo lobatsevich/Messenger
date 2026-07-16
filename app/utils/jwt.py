@@ -25,3 +25,4 @@ def decode_token(token: str):
 
     except JWTError:
         return None
+    

@@ -120,27 +120,30 @@
         <div class="register auth-tab" onclick="toggleForm('registerForm')">Регистрация</div>
     </div>
 
-    <form id="loginForm" action="/login" method="post">
+    <form id="loginForm">
 
         <label for="login">Имя пользователя:</label>
-        <input type="text" id="login" name="login" placeholder="Введите ваш логин" minlength="4" maxlength="16" required>
+        <input type="text" name="login" placeholder="Введите ваш логин..." minlength="4" maxlength="16" required>
         
         <label for="password">Пароль:</label>
-        <input type="password" id="password" name="password" placeholder="Введите пароль" minlength="4" maxlength="20" required>
+        <input type="password" name="password" placeholder="Введите пароль..." minlength="4" maxlength="20" required>
 
         <button type="submit">Войти</button>
     </form>
 
-    <form id="registerForm" action="/register" method="post" style="display: none">
+    <form id="registerForm" style="display: none">
 
         <label for="login">Ваш логин:</label>
-        <input type="text" id="login" name="login" placeholder="Введите ваш логин" minlength="4" maxlength="16" required>
-
-        <label for="password">Пароль:</label>
-        <input type="password" id="password" name="password" placeholder="Введите пароль" minlength="4" maxlength="20" required>
+        <input type="text" name="login" placeholder="Введите ваш логин..." minlength="4" maxlength="16" required>
 
         <label for="username">Ваше имя</label>
-        <input type="text" id="username" name="username" placeholder="Введите ваше имя" minlength="2" maxlength="24" required>
+        <input type="text" name="username" placeholder="Введите ваше имя..." minlength="2" maxlength="24" required>
+        
+        <label for="tag">Ваш тег</label>
+        <input type="text" name="tag" placeholder="Введите тег..." minlength="4" maxlength="20" required>
+
+        <label for="password">Пароль:</label>
+        <input type="password" name="password" placeholder="Введите пароль..." minlength="4" maxlength="20" required>
 
         <button type="submit">Зарегистрироваться</button>
     </form>
@@ -163,5 +166,6 @@
             }
         }
     </script>
+    <script type="module" src="/static/js/pages/auth.js"></script>
 </body>
 </html>

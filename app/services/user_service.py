@@ -1,12 +1,14 @@
-from app.repositories import UserRepository
-from app.database.models import User
+from sqlalchemy.orm import Session
 
+from app.database.models import User
+from app.repositories import UserRepository
 from app.utils.security import hash_password, verify_password
 
 class UserService:
 
-    def __init__(self, repository: UserRepository):
-        self.repository = repository
+    def __init__(self, db: Session):
+        self.db = db
+        self.repository = UserRepository(db)
 
     
     def register_user(self, login: str, username: str, password: str, tag: str):

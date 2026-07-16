@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="static/css/style.css">
-    <link type="image/x-icon" href="/img/favicon-32x32.png" rel="shortcut icon">
-    <link type="Image/x-icon" href="/img/favicon-32x32.png" rel="icon">
+    <link type="image/x-icon" href="static/img/favicon-32x32.png" rel="shortcut icon">
+    <link type="Image/x-icon" href="static/img/favicon-32x32.png" rel="icon">
     <title>Мессенджер</title>
 </head>
 <body>
 
-    <div id="contextMenu" class="hidden">
+    <!-- <div id="contextMenu" class="hidden">
         <ul>
           <li class="edit-button" onclick="editMessage()">Редактировать</li>
           <li class="copy-button" onclick="copyMessage()">Копировать</li>
           <li class="delete-button" onclick="deleteMessage()">Удалить</li>
         </ul>
-    </div>
+    </div> -->
 
     <div class="messenger-container">
 
@@ -84,12 +84,6 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
-    <script src="static/js/socket.js"></script>
-    <script src="static/js/interface.js"></script>
-    <script src="static/js/messages.js"></script>
-    <script src="static/js/utils.js"></script>
-    <script src="static/js/users.js"></script>
-    <script src="static/js/frontend.js"></script>
+    <script type="module" src="/static/js/pages/messenger.js"></script>
 </body>
 </html>

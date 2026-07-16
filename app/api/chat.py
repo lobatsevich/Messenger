@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user, get_chat_service, get_message_service
+from app.api.deps import get_current_user, get_chat_service, get_message_service, get_websocket_notifier
 from app.database.models import User
 from app.services import ChatService, MessageService
 from app.schemas import ChatPreview, PrivateChatRequest, ChatResponse, SendMessageRequest, MessageResponse
+from app.websocket import WebSocketNotifier
 
 router = APIRouter(prefix="/chats", tags=["chats"])
 
@@ -36,17 +37,22 @@ def get_history(
 
 
 @router.post("/{chat_id}/messages")
-def send_message(
+async def send_message(
     chat_id: int,
     request: SendMessageRequest,
     current_user: User = Depends(get_current_user),
-    service: MessageService = Depends(get_message_service)
+    service: MessageService = Depends(get_message_service),
+    notifier: WebSocketNotifier = Depends(get_websocket_notifier)
 ):
-    return service.send_message(
+    message = service.send_message(
         chat_id,
         current_user.id,
         request.content    
     )
+
+    await notifier.notify_new_message(message)
+
+    return message
 
 
 @router.patch("/{chat_id}/read")

@@ -1,6 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
+
 class ChatPreview(BaseModel):
     chat_id: int
     is_group: bool

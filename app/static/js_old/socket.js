@@ -1,6 +1,20 @@
-const socket = io.connect(`${window.location.protocol}//${window.location.hostname}:2007`);
+const token = localStorage.getItem("token");
+
+const socket = new WebSocket(
+    `ws://${window.location.host}/ws?token=${token}`
+);
 
 let activeReceiver = null;
+
+socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+
+    if (data.type == "new_message") {
+        displayMessage(data.message);
+    }
+
+    console.log(data);
+};
 
 socket.on('send_message', (data) => {
     socket.emit('display_message', data);
