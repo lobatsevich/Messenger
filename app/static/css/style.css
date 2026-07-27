@@ -34,7 +34,7 @@ body {
     width: 100%
 }
 
-.chat-list-item:last-child {
+.chat-preview:last-child {
     margin-bottom: 0;
 }
 
@@ -46,7 +46,7 @@ body {
     font-size: 30px;
 }
 
-.chat-list-item,
+.chat-preview,
 .found-users-item {
     display: flex;
     align-items: center;
@@ -74,7 +74,7 @@ body {
     content: "@";
 }
 
-.chat-list-item:hover {
+.chat-preview:hover {
     background: linear-gradient(45deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
                 rgba(255, 255, 255, 0.1);
 }
@@ -176,7 +176,7 @@ body {
     margin-top: 5px;
 }
 
-.chat-list-item .status {
+.chat-preview .status {
     width: 10px;
     height: 10px;
     background-color: #3498db;
@@ -316,7 +316,7 @@ body {
     margin-bottom: 0;
 }
 
-#chat li[data-youre-message="true"] {
+#chat li[data-outgoing="true"] {
     margin-left: auto;
     background: #9b59b6;
 }
@@ -777,7 +777,7 @@ body {
     width: 100%
 }
 
-.chat-list-item,
+.chat-preview,
 .found-users-item {
     display: flex;
     align-items: center;

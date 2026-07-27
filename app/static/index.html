@@ -10,13 +10,13 @@
 </head>
 <body>
 
-    <!-- <div id="contextMenu" class="hidden">
-        <ul>
-          <li class="edit-button" onclick="editMessage()">Редактировать</li>
-          <li class="copy-button" onclick="copyMessage()">Копировать</li>
-          <li class="delete-button" onclick="deleteMessage()">Удалить</li>
-        </ul>
-    </div> -->
+        <div id="contextMenu" class="hidden">
+                <ul>
+                    <li class="edit-button">Редактировать</li>
+                    <li class="copy-button">Копировать</li>
+                    <li class="delete-button">Удалить</li>
+                </ul>
+        </div>
 
     <div class="messenger-container">
 
@@ -52,10 +52,10 @@
                         <p class="user-tag"><input type="text" id="tag" name="tag" minlength="4" maxlength="20" placeholder="Новый тег"></p>
                     </div>
 
-                    <button type="button" onclick="editProfile();toggleEditMode()">Сохранить</button>
+                    <button type="button" id="saveProfileButton">Сохранить</button>
                 </form>
 
-                <button id="editButton" onclick="toggleEditMode()">Редактировать</button>
+                <button type="button" id="editButton">Редактировать</button>
             </div>
 
             <ul id="found-users" class="hidden">
@@ -73,15 +73,14 @@
             </div>
 
             <form id="send-message-form">
-                <textarea id="content" name="content" placeholder="Введите сообщение..." require></textarea>
+                <textarea id="message-input" name="message-input" placeholder="Введите сообщение..." required></textarea>
                 <div>
-                    <button type="button" onclick="sendMessage()">Отправить</button>
+                    <button type="submit">Отправить</button>
                 </div>
             </form>
         </div>
 
-        <div id="companion-info-container">
-        </div>
+        <div id="companion-info-container" class="hidden-info"></div>
     </div>
 
     <script type="module" src="/static/js/pages/messenger.js"></script>

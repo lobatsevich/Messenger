@@ -12,3 +12,10 @@ export async function sendMessage(chatId, content) {
         }
     );
 }
+
+
+export async function getMessages(chatId) {
+    return apiRequest(
+        `/chats/${chatId}/messages`
+    );
+}

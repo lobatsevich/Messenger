@@ -50,7 +50,7 @@ export async function register(login, username, password, tag) {
                 username,
                 password,
                 tag
-            })
+            })  
         }
     );
 }

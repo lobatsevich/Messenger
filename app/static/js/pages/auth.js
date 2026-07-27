@@ -1,6 +1,7 @@
 import { login, register } from "../api/auth.js"
 import { showError, showSuccess } from "../utils/notifications.js";
 
+
 const loginForm = document.getElementById("loginForm")
 const registerForm = document.getElementById("registerForm")
 

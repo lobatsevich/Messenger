@@ -4,6 +4,7 @@ from fastapi import HTTPException
 
 from app.repositories import ChatRepository, MessageRepository, UserRepository
 
+
 class ChatService:
 
     def __init__(self, db: Session):

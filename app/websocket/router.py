@@ -6,7 +6,7 @@ from app.websocket.auth import get_current_user_ws
 router = APIRouter()
 
 
-@router.websocket("/ws/{user_id}")
+@router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     user = get_current_user_ws(websocket)
     
@@ -17,7 +17,7 @@ async def websocket_endpoint(websocket: WebSocket):
             data = await websocket.receive_json()
 
             print(
-                f'User {user.id}: {data}'
+                f"User {user.id}: {data}"
             )
 
     except WebSocketDisconnect:
