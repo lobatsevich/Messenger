@@ -747,14 +747,12 @@ body {
     width: 100vw;
 }
 
-/* Стили для контейнера мессенджера */
 .messenger-container {
     display: flex;
     height: 100%;
     overflow: hidden;
 }
 
-/* Стили для контейнера списка чатов */
 .chat-list-container {
     background-color: #2c3e50;
     color: #ecf0f1;

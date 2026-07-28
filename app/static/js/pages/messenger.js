@@ -29,7 +29,7 @@ async function loadChats() {
 
 async function openChat(chat) {
     state.setActiveChat(chat.chat_id);
-    console.log('openChat called for', chat);
+    console.log("openChat called for", chat);
     displayChatHeader(chat);
 
     const messages = await getMessages(chat.chat_id);
