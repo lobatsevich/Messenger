@@ -1,198 +1,249 @@
-# 💬 Messenger Project (FastAPI Backend)
+# Messenger (FastAPI Backend)
 
-This repository contains a backend implementation of a real-time messenger system built with **FastAPI, PostgreSQL, and SQLAlchemy**.
+A real-time messenger backend built with FastAPI, SQLAlchemy, PostgreSQL, Alembic, and JWT auth.
 
-The project is a transition from a previous Node.js + Socket.IO prototype into a **clean, scalable backend architecture with proper database design, authentication, and messaging system core**.
+Current status:
+- Backend is the source of truth and is actively used.
+- Static frontend assets are served from `app/static`.
 
----
+## Features
 
-## 🚀 Project Overview
+- JWT authentication (`/auth/register`, `/auth/login`, `/auth/me`)
+- Private chat creation (`/chats/private`)
+- Chat list for current user (`/chats`)
+- Message history (`/chats/{chat_id}/messages`)
+- Send message (`POST /chats/{chat_id}/messages`)
+- Mark chat messages as read (`PATCH /chats/{chat_id}/read`)
+- WebSocket endpoint for live events (`/ws?token=...`)
+- Real-time broadcast of `new_message` events to chat members
 
-This is a backend-first messenger system with:
+## Tech Stack
 
-- User authentication (JWT-based)
-- Private messaging system
-- Group chat support (architecture ready)
-- Chat auto-creation for private dialogs
-- Message history retrieval
-- Read/unread message state
-- Last message tracking for chats
-- Clean layered architecture (API → Service → Repository → DB)
+- FastAPI
+- SQLAlchemy 2.x (sync engine)
+- PostgreSQL
+- Alembic migrations
+- Pydantic
+- python-jose (JWT)
+- Argon2 (password hashing)
 
-The system is designed as a foundation for a full real-time messenger (WebSocket layer planned next).
+## Project Layout
 
----
-
-## 🧠 Architecture
-
-```
-
-API Layer (FastAPI routes)
-↓
-Service Layer (business logic)
-↓
-Repository Layer (database access)
-↓
-SQLAlchemy Models
-↓
-PostgreSQL
-
-```
-
-This ensures:
-- separation of concerns
-- testability
-- scalability
-- clean domain logic
-
----
-
-## 🏗️ Project Structure
-
-```
-
+```text
 app/
-├── api/              # REST API routes
-│   ├── auth.py
-│   ├── chat.py
-│   ├── deps.py
-│   ├── messages.py
-│   └── pages.py
-│
-├── services/         # business logic layer
-│   ├── chat_service.py
-│   ├── message_service.py
-│   └── user_service.py
-│
-├── repositories/     # database access layer
-│   ├── chats.py
-│   ├── users.py
-│   └── messages.py
-│
-├── database/
-│   ├── models/       # SQLAlchemy models
-│   ├── database.py   # engine/session/Base
-│   └── dependencies.py
-│
-├── schemas/          # Pydantic DTOs
-├── utils/            # JWT, helpers
-└── main.py
-
+  api/                # REST routes
+  database/           # engine, session, models
+  repositories/       # data access layer
+  services/           # business logic layer
+  schemas/            # pydantic DTOs
+  static/             # static frontend (HTML/CSS/JS)
+  websocket/          # websocket router/auth/manager/notifier
+alembic/              # migrations
 ```
 
----
+## How It Works
 
-## ⚙️ Tech Stack
+### HTTP flow
 
-- **FastAPI**
-- **PostgreSQL**
-- **SQLAlchemy 2.0**
-- **Alembic (migrations)**
-- **Pydantic**
-- **JWT (python-jose)**
-- **bcrypt**
+1. Client authenticates via `/auth/login`.
+2. Backend returns JWT `access_token`.
+3. Client sends `Authorization: Bearer <token>` to protected endpoints.
+4. Chat and message operations are handled by service/repository layers.
 
----
+### WebSocket flow
 
-## 🔐 Authentication
+1. Client opens WebSocket connection to `/ws?token=<jwt>`.
+2. Backend validates token in websocket auth layer.
+3. Connection manager stores active sockets by user id.
+4. On message creation, notifier sends `new_message` event to all chat members currently online.
 
-- User registration with login, username, tag, password
-- JWT-based authentication
-- Protected routes via dependency injection
-- `/auth/login`, `/auth/register`, `/auth/me`
+Example event payload:
 
----
+```json
+{
+  "type": "new_message",
+  "message": {
+    "id": 123,
+    "chat_id": 1,
+    "sender_id": 2,
+    "content": "Hello",
+    "created_at": "2026-07-29T10:20:00Z",
+    "edited": false,
+    "is_read": false
+  }
+}
+```
 
-## 💬 Messaging System
+## Environment Variables
 
-### Features:
+Create `.env` in the repo root.
 
-- Send messages in chats
-- Private messaging (auto chat creation if not exists)
-- Group chat messaging support
-- Message history per chat
-- Read/unread tracking (`is_read`)
-- Message timestamps
-- Edited message flag (prepared)
+Required:
 
----
+- `DATABASE_URL`
+- `SECRET_KEY`
 
-## 🧩 Chat System
+Recommended in Docker mode:
 
-- Private chats are created automatically between users
-- Group chats supported via `is_group` flag
-- Chat membership via `chat_members`
-- Chat ownership and access validation
-- Ready for real-time sync (WebSocket layer planned)
+- `POSTGRES_DB`
+- `POSTGRES_USER`
+- `POSTGRES_PASSWORD`
 
----
+Example for Docker:
 
-## 📊 Database Features
+```env
+SECRET_KEY=replace-with-a-long-random-secret
+DEBUG=True
+POSTGRES_DB=messenger
+POSTGRES_USER=messenger
+POSTGRES_PASSWORD=messenger
+DATABASE_URL=postgresql+psycopg2://messenger:messenger@db:5432/messenger
+```
 
-- Relational schema (users, chats, messages, chat_members)
-- Foreign keys with CASCADE behavior
-- Alembic migrations configured
-- Chat enrichment fields:
-  - `last_message_id`
-  - `last_message_at`
+Example for local (no Docker DB service):
 
-These fields allow efficient chat sorting without heavy joins.
+```env
+DATABASE_URL=postgresql://your_db_user:your_db_password@localhost:5432/messenger
+SECRET_KEY=your_secret_key
+DEBUG=True
+```
 
----
+Important:
+- In Docker, DB host should be `db` (service name).
+- In local run, DB host is usually `localhost`.
 
-## 📡 API Endpoints
+## Run Locally (without Docker)
 
-### Auth
-- `POST /auth/register`
-- `POST /auth/login`
-- `GET /auth/me`
+1. Create and activate venv.
+2. Install dependencies from `requirements.txt`.
+3. Configure `.env`.
+4. Run migrations.
+5. Start server.
 
-### Messages
-- `POST /messages/private`
-- `POST /messages/chat`
-- `GET /messages/history/{chat_id}`
-- `POST /messages/{chat_id}/read`
+Typical command sequence (PowerShell):
 
----
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+alembic upgrade head
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
 
-## 🧭 Current Status
+Open:
+- `http://127.0.0.1:8000/`
+- `http://127.0.0.1:8000/auth`
 
-### ✅ Implemented
+## Run with Docker
 
-- JWT authentication system
-- User system
-- Chat creation and membership logic
-- Private messaging system
-- Message history
-- Read/unread state
-- Database migrations (Alembic)
-- Chat last-message tracking fields
-- Clean architecture (service/repository separation)
+Prerequisites:
+- Docker Desktop installed and running
+- Virtualization enabled in BIOS/UEFI
 
-### 🚧 Next Steps
+Start:
 
-- WebSocket real-time messaging
-- Live chat updates
-- Typing indicators
-- Online/offline presence system
-- Chat list endpoint with optimized sorting
-- Frontend integration
+```bash
+docker compose up --build
+```
 
----
+Stop:
 
-## 🎯 Project Goal
+```bash
+docker compose down
+```
 
-This project is designed to demonstrate:
+Stop and remove DB volume:
 
-- Backend architecture design skills
-- Real-world messaging system implementation
-- Database-driven system design
-- Transition from prototype (Node.js) → production-style Python backend
-- Readiness for scalable real-time systems
+```bash
+docker compose down -v
+```
 
----
+Useful:
 
-## 📌 Notes
+```bash
+docker compose logs -f app
+docker compose logs -f db
+docker compose exec app alembic upgrade head
+```
 
-This is an actively evolving project.
-Current focus: building a production-ready backend foundation for a real-time messenger system.
+## Docker Files in This Repo
+
+- `Dockerfile`:
+  - Uses `python:3.13-slim`
+  - Installs runtime dependency `libpq5`
+  - Converts UTF-16 `requirements.txt` to UTF-8 before `pip install`
+  - Runs `alembic upgrade head` then starts Uvicorn
+
+- `docker-compose.yml`:
+  - `db` service: PostgreSQL 16
+  - `app` service: FastAPI container
+  - Healthcheck for PostgreSQL
+  - App waits for healthy DB before start
+
+- `.dockerignore`:
+  - Excludes caches, venvs, node_modules, and other unnecessary files from build context
+
+## GitHub and Secrets
+
+- Commit `.env.example` to GitHub: yes, recommended.
+- Do NOT commit real `.env` with secrets.
+- Keep `.env` in `.gitignore`.
+
+## Testing Status and Plan
+
+Current state:
+- In this snapshot, there is no active test suite in the repository tree.
+
+Should tests be added?
+- Yes. For a messenger backend with auth, chat membership, and websocket notifications, tests are strongly recommended.
+
+Suggested minimum test layers:
+
+1. Unit tests
+- Service-layer validation (chat access, message rules, auth edge cases).
+
+2. API integration tests
+- Auth flow (`register -> login -> /auth/me`), chat/message endpoints, read status updates.
+
+3. WebSocket integration tests
+- Connect with JWT, send message through HTTP, verify `new_message` arrives via WS.
+
+Suggested tools:
+- `pytest`
+- `httpx` (for async test client)
+- test database setup (separate DB/schema)
+
+## Roadmap
+
+### Phase 1: Stabilize current backend
+
+- Harden error handling and input validation
+- Improve logging and observability
+- Add baseline automated tests (unit + API)
+
+### Phase 2: Real-time improvements
+
+- Typing indicators event flow
+- Presence (online/offline) tracking
+- Better reconnect behavior and delivery guarantees
+
+### Phase 3: Frontend refactor/migration (planned)
+
+- Introduce a React-based frontend as the next iteration
+- Introduce centralized client state management
+- Formalize API/WS client layers
+- Preserve backward compatibility during transition
+
+This is planned as a frontend refactor/migration, not a full rewrite from zero.
+
+### Phase 4: Quality and deployment
+
+- CI for lint/tests/migrations checks
+- Container hardening and production env profiles
+- Basic monitoring and runtime diagnostics
+
+## Notes
+
+- This project was originally implemented as a Node.js prototype and later migrated to FastAPI.
+- The backend currently serves static pages from `app/static`.
+- Docker files can be safely committed even before local virtualization is enabled.
